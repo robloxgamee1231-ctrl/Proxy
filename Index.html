@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>now.gg Roblox</title>
+
+<style>
+/* ===== BODY ===== */
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    background: black;
+    color: #00ff9c;
+}
+
+/* ===== GLITCH BACKGROUND ===== */
+.glitch-bg {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0,255,156,0.08) 0px,
+        rgba(0,255,156,0.08) 2px,
+        transparent 2px,
+        transparent 4px
+    );
+    animation: scan 4s linear infinite;
+}
+
+@keyframes scan {
+    from { background-position: 0 0; }
+    to { background-position: 0 100vh; }
+}
+
+/* ===== CENTER CONTENT ===== */
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+/* ===== TITLE GLITCH EFFECT ===== */
+.glitch {
+    font-size: 40px;
+    font-weight: bold;
+    position: relative;
+    color: #00ff9c;
+    text-shadow: 0 0 5px #00ff9c, 0 0 20px #00ff9c;
+    animation: flicker 1.5s infinite;
+}
+
+@keyframes flicker {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+/* ===== BUTTON ===== */
+button {
+    margin-top: 30px;
+    padding: 15px 40px;
+    font-size: 18px;
+    background: black;
+    color: #00ff9c;
+    border: 2px solid #00ff9c;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #00ff9c;
+    color: black;
+    box-shadow: 0 0 20px #00ff9c;
+}
+</style>
+</head>
+
+<body>
+
+<div class="glitch-bg"></div>
+
+<div class="container">
+    <div class="glitch">now.gg ROBLOX</div>
+
+    <button onclick="openNowGG()">Play on now.gg</button>
+</div>
+
+<script>
+function openNowGG() {
+    window.open("https://now.gg/play/roblox", "_blank");
+}
+</script>
+
+</body>
+</html>
