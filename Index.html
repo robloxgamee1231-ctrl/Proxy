@@ -1,100 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>now.gg Roblox</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello Neighbor: Glitch Edition</title>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
 
-<style>
-/* ===== BODY ===== */
-body {
-    margin: 0;
-    height: 100vh;
-    overflow: hidden;
-    font-family: Arial, sans-serif;
-    background: black;
-    color: #00ff9c;
-}
+    <style>
+        body { margin: 0; height: 100vh; overflow: hidden; font-family: Arial, sans-serif; background: black; color: #00ff9c; }
+        
+        /* Glitch UI Layer */
+        #menu {
+            position: fixed; width: 100%; height: 100%; z-index: 9999;
+            background: black; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+        }
 
-/* ===== GLITCH BACKGROUND ===== */
-.glitch-bg {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: repeating-linear-gradient(
-        0deg,
-        rgba(0,255,156,0.08) 0px,
-        rgba(0,255,156,0.08) 2px,
-        transparent 2px,
-        transparent 4px
-    );
-    animation: scan 4s linear infinite;
-}
+        .glitch-bg {
+            position: absolute; width: 100%; height: 100%;
+            background: repeating-linear-gradient(0deg, rgba(0,255,156,0.08) 0px, rgba(0,255,156,0.08) 2px, transparent 2px, transparent 4px);
+            animation: scan 4s linear infinite; pointer-events: none;
+        }
 
-@keyframes scan {
-    from { background-position: 0 0; }
-    to { background-position: 0 100vh; }
-}
+        @keyframes scan { from { background-position: 0 0; } to { background-position: 0 100vh; } }
 
-/* ===== CENTER CONTENT ===== */
-.container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-}
+        .title { font-size: 50px; font-weight: bold; text-shadow: 0 0 10px #00ff9c; animation: flicker 1.5s infinite; }
+        @keyframes flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
 
-/* ===== TITLE GLITCH EFFECT ===== */
-.glitch {
-    font-size: 40px;
-    font-weight: bold;
-    position: relative;
-    color: #00ff9c;
-    text-shadow: 0 0 5px #00ff9c, 0 0 20px #00ff9c;
-    animation: flicker 1.5s infinite;
-}
+        button {
+            margin-top: 30px; padding: 15px 50px; font-size: 20px;
+            background: transparent; color: #00ff9c; border: 2px solid #00ff9c;
+            cursor: pointer; transition: 0.3s; pointer-events: auto;
+        }
+        button:hover { background: #00ff9c; color: black; box-shadow: 0 0 30px #00ff9c; }
 
-@keyframes flicker {
-    0% { opacity: 1; }
-    50% { opacity: 0.7; }
-    100% { opacity: 1; }
-}
-
-/* ===== BUTTON ===== */
-button {
-    margin-top: 30px;
-    padding: 15px 40px;
-    font-size: 18px;
-    background: black;
-    color: #00ff9c;
-    border: 2px solid #00ff9c;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-button:hover {
-    background: #00ff9c;
-    color: black;
-    box-shadow: 0 0 20px #00ff9c;
-}
-</style>
+        /* HUD for Game */
+        #hud { position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: none; }
+    </style>
 </head>
 
 <body>
 
-<div class="glitch-bg"></div>
-
-<div class="container">
-    <div class="glitch">now.gg ROBLOX</div>
-
-    <button onclick="openNowGG()">Play on now.gg</button>
+<div id="menu">
+    <div class="glitch-bg"></div>
+    <div class="title">HELLO NEIGHBOR</div>
+    <button onclick="startGame()">PLAY GAME</button>
 </div>
 
+<div id="hud">
+    <button style="width: 80px; height: 80px; border-radius: 50%;" onclick="toggleF()">💡</button>
+</div>
+
+<a-scene xr-mode-ui="enabled: false" embedded>
+    <a-assets>
+        <img id="grass" src="https://i.imgur.com/v5fS09X.png">
+        <img id="face" src="https://i.imgur.com/3YpX7D6.png">
+    </a-assets>
+
+    <a-sky color="#020202"></a-sky>
+    <a-light type="ambient" intensity="0.4"></a-light>
+    <a-plane rotation="-90 0 0" width="100" height="100" src="#grass" repeat="20 20"></a-plane>
+
+    <a-entity position="0 0 -10">
+        <a-box position="0 3 0" width="12" height="6" depth="12" color="#4a301d"></a-box>
+        <a-box position="0 6.5 0" width="13" height="1" depth="13" color="#222"></a-box>
+    </a-entity>
+
+    <a-entity id="rig" movement-controls="controls: keyboard, joystick; speed: 0.2" position="0 0 10">
+        <a-entity id="camera" camera position="0 1.6 0" look-controls="pointerLockEnabled: true">
+            <a-entity id="beam" light="type: spot; intensity: 0; distance: 20"></a-entity>
+            <a-sphere position="-0.4 -0.4 -0.5" radius="0.07" color="#ffff00"></a-sphere>
+            <a-sphere position="0.4 -0.4 -0.5" radius="0.07" color="#ffff00"></a-sphere>
+        </a-entity>
+    </a-entity>
+
+    <a-entity id="neighbor" position="0 0 -5">
+        <a-box position="0 1 0" width="0.6" height="2" color="purple"></a-box>
+        <a-sphere position="0 2.2 0" radius="0.3" src="#face"></a-sphere>
+    </a-entity>
+</a-scene>
+
 <script>
-function openNowGG() {
-    window.open("https://now.gg/play/roblox", "_blank");
-}
+    let active = false;
+    let flash = false;
+
+    function startGame() {
+        document.getElementById('menu').style.display = 'none';
+        document.getElementById('hud').style.display = 'block';
+        active = true;
+        
+        // Lock the mouse for Chromebook
+        document.body.requestPointerLock();
+        
+        // Give player a 3 second head start
+        setTimeout(() => { window.canBeCaught = true; }, 3000);
+    }
+
+    function toggleF() {
+        flash = !flash;
+        document.querySelector('#beam').setAttribute('light', 'intensity', flash ? 2 : 0);
+    }
+
+    setInterval(() => {
+        if (!active) return;
+        const n = document.querySelector('#neighbor').object3D.position;
+        const p = document.querySelector('#rig').object3D.position;
+        const speed = 0.04;
+
+        if (n.x < p.x) n.x += speed; else n.x -= speed;
+        if (n.z < p.z) n.z += speed; else n.z -= speed;
+
+        if (window.canBeCaught && n.distanceTo(p) < 2) {
+            alert("CAUGHT!");
+            location.reload();
+        }
+    }, 50);
 </script>
 
 </body>
